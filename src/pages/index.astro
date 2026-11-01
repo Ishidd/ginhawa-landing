@@ -7,10 +7,7 @@ import ScrollJourney from '../components/ScrollJourney.astro';
 import Faq from '../components/Faq.astro';
 import Footer from '../components/Footer.astro';
 import ValidationBadge from '../components/ValidationBadge.astro';
-import { apkUrl } from '../data/showcase';
-import { createRequire } from 'node:module';
-const QRCode = createRequire(import.meta.url)('qrcode');
-const qr = apkUrl ? await QRCode.toDataURL(apkUrl, {width: 180, margin: 2, errorCorrectionLevel: 'M'}) : '';
+import { apkUrl, androidRelease } from '../data/showcase';
 const title = 'ginhawa | Find your calm, one moment at a time.';
 const description = 'Check in with yourself, understand your stress, and discover small steps toward a more balanced day. Meet ginhawa, your student wellbeing companion.';
 ---
@@ -46,10 +43,32 @@ const description = 'Check in with yourself, understand your stress, and discove
     <section class="chika-section section wrap balanced-layout" id="chika" aria-labelledby="chika-title"><div class="chika-world reveal"><div class="chika-halo" aria-hidden="true"></div><span class="chika-orbit" aria-hidden="true"></span><img class="chika-animation" src="/assets/chika-front-bow-still.webp" data-still="/assets/chika-front-bow-still.webp" data-animated="/assets/chika-front-bow.webp" width="480" height="515" alt="Chika gives a friendly bow, wearing the STI College shirt." loading="lazy" /><span class="chika-signature">Hi, I’m Chika.</span></div><div class="chika-copy reveal"><h2 id="chika-title">A little company.<br /> <em>Along the way.</em></h2><p>Meet Chika, your companion for check-ins, reflection, and small steps forward.</p><a class="text-link" href="#explore" data-focus-screen="chika">Say hello to Chika <span aria-hidden="true">↗</span></a></div></section>
     <ScreenShowcase />
     <AiRecommendations />
-    <section class="download section" id="download" aria-labelledby="download-title"><div class="download-glow" aria-hidden="true"></div><div class="download-layout wrap balanced-layout"><div class="download-copy"><h2 class="reveal" id="download-title">Make room <em>for a calmer day.</em></h2><p>A little space to breathe. Wherever your day takes you.</p></div><div class="download-action reveal">{apkUrl ? <><a class="button" href={apkUrl}>Download for Android <span aria-hidden="true">↓</span></a><div class="qr"><img src={qr} width="180" height="180" alt="Scan to download the ginhawa Android APK" /><span>Scan with your Android camera</span></div><p class="installation">Download the APK, open it on your Android device, and follow the installation prompts. If asked, allow installation from your browser, then turn that permission off afterward.</p></> : <><h3 class="release-title">Your space is on its way.</h3><p class="release-copy">The Android download and QR code will appear here at release.</p><a href="#explore" class="button">Explore the app <span aria-hidden="true">↗</span></a></>}</div></div></section>
+    <section class="download section" id="download" aria-labelledby="download-title">
+      <div class="download-glow" aria-hidden="true"></div>
+      <div class="download-layout wrap balanced-layout">
+        <div class="download-copy"><h2 class="reveal" id="download-title">Make room <em>for a calmer day.</em></h2><p>A little space to breathe. Wherever your day takes you.</p></div>
+        <div class="download-action reveal">{androidRelease ? <>
+          <a class="button" href={androidRelease.url}>Download for Android <span aria-hidden="true">↓</span></a>
+          <p class="installation">Version {androidRelease.version}</p>
+          <div class="qr"><a href="/download-qr.png" download="ginhawa-android-qr.png" aria-label="Save the GINHAWA Android download QR code"><img src="/download-qr.png" width="180" height="180" alt="Scan to download the ginhawa Android APK" /></a><span>Scan with your Android camera · Tap to save</span></div>
+          <p class="installation">Open the APK on your Android device and follow the installation prompts. If asked, allow installation from your browser, then turn that permission off afterward. Keep GINHAWA installed to preserve your data.</p>
+          <details class="download-integrity"><summary>Verify your download</summary><p>SHA-256</p><code>{androidRelease.sha256}</code></details>
+        </> : <>
+          <h3 class="release-title">Your space is on its way.</h3><p class="release-copy">The Android download and QR code will appear here at release.</p><a href="#explore" class="button">Explore the app <span aria-hidden="true">↗</span></a>
+        </>}</div>
+      </div>
+    </section>
     <Faq />
   </main>
   <Footer />
   <script src="../scripts/cinematic.ts"></script>
 </body>
 </html>
+
+<style>
+  .download-integrity { max-width: 36rem; margin-top: 1.5rem; text-align: left; }
+  .download-integrity summary { cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
+  .download-integrity summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .download-integrity p { margin: 1rem 0 .5rem; }
+  .download-integrity code { overflow-wrap: anywhere; font-size: .8rem; }
+</style>

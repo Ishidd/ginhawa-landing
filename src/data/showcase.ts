@@ -12,6 +12,10 @@ export const screens = [
 ];
 export type ScreenTheme = 'dark' | 'light';
 export const screenPath = (screen: typeof screens[number], theme: ScreenTheme) => `/screens/${theme}mode/${screen[theme]}.webp`;
-// Set only to a verified public APK destination. Empty means coming soon.
-export const apkUrl = (import.meta.env.PUBLIC_APK_URL || '').trim();
-if (apkUrl && !/^https:\/\//.test(apkUrl)) throw new Error('PUBLIC_APK_URL must be a verified HTTPS APK URL.');
+import { publicAndroidRelease } from './android-release.mjs';
+export const androidRelease = publicAndroidRelease({
+  PUBLIC_APK_URL: import.meta.env.PUBLIC_APK_URL,
+  PUBLIC_APK_SHA256: import.meta.env.PUBLIC_APK_SHA256,
+  PUBLIC_APK_VERSION: import.meta.env.PUBLIC_APK_VERSION,
+});
+export const apkUrl = androidRelease?.url || '';

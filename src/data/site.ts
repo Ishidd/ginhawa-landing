@@ -1,4 +1,5 @@
 // Public copy and the optional future contact destination live here.
+import { apkUrl } from './showcase';
 // Leave contactEmail empty to keep all inquiry links hidden.
 export const site = {
   name: 'GINHAWA',
@@ -18,8 +19,13 @@ export const activities = [
   { id: 'breathing', title: 'Room for a slower breath.', subtitle: 'Cyclic sighing', text: 'Explore a gentle breathing activity. Choose a pace that feels comfortable.', video: 'breathing.mp4', poster: 'breathing-poster.webp', transcript: 'The looping visual demonstrates a seated breathing exercise. Breathe in gently, take a second smaller inhale, then breathe out slowly through your mouth. Keep the breathing comfortable and unforced. Stop if you feel dizzy or uncomfortable.' },
 ];
 
+export const downloadQuestion = {
+  question: 'Can I download GINHAWA now?',
+  answer: apkUrl ? 'Yes. Get the approved Android APK from the download section on this official website. Open the download on your phone and follow Android’s installation prompts. Keep the existing app installed to preserve your data.' : 'The public Android download is on its way. The approved APK and QR code will appear in the download section when it is ready.',
+};
+
 export const questions = [
-  { question: 'Can I download GINHAWA now?', answer: 'This website introduces the capstone project. A public download is not currently offered here. Explore the Demo shows real app screens with fictional example data, without creating an account.' },
+  downloadQuestion,
   { question: 'Does GINHAWA diagnose mental health conditions?', answer: 'No. Assessments and guidance support wellbeing, reflection, and self-awareness. They do not provide a medical or psychological diagnosis, treatment, or a replacement for professional care.' },
   { question: 'How are general and AI recommendations different?', answer: 'General recommendations are curated suggestions matched to an assessment’s stress or distress level. AI guidance uses assessment results, chosen stress factors, and relevant mood context to suggest more personalized next steps. AI can be unavailable or mistaken; it does not make diagnoses.' },
   { question: 'Are these real student records?', answer: 'No. App previews use local test fixtures and fictional example results. The associate dashboard illustration uses synthetic data. This website has no connection to student accounts or the administration system.' },
