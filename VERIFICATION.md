@@ -99,3 +99,6 @@ PUBLIC_APK_URL remains unset. Download area explains that the Android download a
 
 ## Centered FAQ and reordered Download — 1 November 2026
 Production build and check-build passed (7 routes, 210 references). Browser DOM confirms page order AI guidance → Download → FAQ, with Download the final of six route nodes and the SVG ending before FAQ. FAQ heading is above the centered 800px card stack, and native question expansion was exercised.
+
+## Gallery decode readiness and current social preview — 1 November 2026
+Hidden 3D phones used native lazy images; navigation could reveal them before decode. The gallery now warms DOM images within 700px, awaits decoded images before navigation, and swaps fully decoded theme images together. Revision checks cancel stale theme/navigation work; loading failure retains the current screen instead of exposing an empty replacement. Browser exercised nine next-screen actions and both themes: all 18 screenshot assets decoded with nonzero natural widths, no application errors. The Open Graph graphic uses the current navy/mint palette, real phone screen, current Chika, and lowercase brand. Versioned metadata points to social-preview-v2.png (1200×630); the old image URL is also refreshed. A reproducible optional Pillow generator is in scripts/generate-social-preview.py.

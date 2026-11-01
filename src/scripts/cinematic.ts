@@ -9,6 +9,24 @@ let active = 'home';
 let position = 0;
 let destination = 0;
 let animation = 0;
+let moveRevision = 0;
+const decodedImages = new Map<string, Promise<HTMLImageElement>>();
+function loadScreenshot(source: string) {
+  let ready = decodedImages.get(source);
+  if (!ready) {
+    const image = new Image();
+    image.src = source;
+    ready = image.decode().then(() => image).catch(error => { decodedImages.delete(source); throw error; });
+    decodedImages.set(source, ready);
+  }
+  return ready;
+}
+async function decodePhone(phone: HTMLButtonElement) {
+  const image = phone.querySelector('img')!;
+  // A hidden, transformed phone must not wait for native lazy-loading heuristics.
+  image.loading = 'eager';
+  await image.decode();
+}
 let order = [...screens].sort((a, b) => a[theme] - b[theme]);
 
 
@@ -44,10 +62,24 @@ function caption() {
   document.querySelectorAll<HTMLButtonElement>('.feature-menu button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.focusScreen === active)));
 }
 
-function moveTo(target: number) {
-  cancelAnimationFrame(animation);
+async function moveTo(target: number) {
+  const revision = ++moveRevision;
   destination = target;
-  active = order[((target % 9) + 9) % 9].id;
+  const targetScreen = order[((target % 9) + 9) % 9];
+  carousel.setAttribute('aria-busy', 'true');
+  try {
+    await Promise.all(phones.map(decodePhone));
+  } catch {
+    if (revision !== moveRevision) return;
+    destination = order.findIndex(screen => screen.id === active);
+    carousel.setAttribute('aria-busy', 'false');
+    document.querySelector('#screen-announcement')!.textContent = 'This screen could not load. Please try again.';
+    return;
+  }
+  if (revision !== moveRevision) return;
+  cancelAnimationFrame(animation);
+  carousel.setAttribute('aria-busy', 'false');
+  active = targetScreen.id;
   caption();
   const from = position;
   const started = performance.now();
@@ -116,27 +148,50 @@ carousel.addEventListener('pointercancel', () => {gesture = null; suppressClick 
 let themeRevision = 0;
 document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(button => button.addEventListener('click', async () => {
   const next = button.dataset.theme as ScreenTheme;
-  if (next === theme) return;
   const revision = ++themeRevision;
-  theme = next;
+  // Clicking the already displayed theme cancels a pending opposite-theme load.
+  if (next === theme) { carousel.setAttribute('aria-busy', 'false'); return; }
+  carousel.setAttribute('aria-busy', 'true');
+  let prepared: HTMLImageElement[];
+  try {
+    prepared = await Promise.all(phones.map(phone => {
+      const screen = screens.find(screen => screen.id === phone.dataset.screenId)!;
+      return loadScreenshot(screenPath(screen, next));
+    }));
+  } catch {
+    if (revision !== themeRevision) return;
+    carousel.setAttribute('aria-busy', 'false');
+    document.querySelector('#screen-announcement')!.textContent = 'That theme could not load. Please try again.';
+    return;
+  }
+  if (revision !== themeRevision) return;
+  ++moveRevision;
   cancelAnimationFrame(animation);
+  // Swap already decoded image elements together, then change the track order.
+  // The current theme remains fully visible until every replacement is ready.
+  phones.forEach((phone, index) => {
+    const old = phone.querySelector('img')!;
+    const replacement = prepared[index];
+    for (const attribute of old.attributes) if (attribute.name !== 'src') replacement.setAttribute(attribute.name, attribute.value);
+    replacement.loading = 'eager';
+    old.replaceWith(replacement);
+  });
+  theme = next;
   order = [...screens].sort((a, b) => a[theme] - b[theme]);
   position = destination = order.findIndex(screen => screen.id === active);
   document.querySelector('.theme-switch')!.setAttribute('data-theme', theme);
   document.querySelectorAll<HTMLButtonElement>('.theme-switch button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  carousel.setAttribute('aria-busy', 'false');
   caption();
   paintPhones();
-  await Promise.all(phones.map(async phone => {
-    const screen = screens.find(screen => screen.id === phone.dataset.screenId)!;
-    const img = phone.querySelector('img')!;
-    const source = screenPath(screen, next);
-    const preload = new Image(); preload.src = source;
-    try { await preload.decode(); } catch { return; }
-    if (revision !== themeRevision) return;
-    img.src = source;
-    if (!reducedMotion.matches) img.animate([{opacity:.35},{opacity:1}], {duration:400,easing:'ease-out'});
-  }));
 }));
+// Warm the actual DOM images before the gallery enters view, including hidden neighbors.
+const galleryPreload = new IntersectionObserver(entries => {
+  if (!entries.some(entry => entry.isIntersecting)) return;
+  galleryPreload.disconnect();
+  void Promise.allSettled(phones.map(decodePhone));
+}, {rootMargin:'700px'});
+galleryPreload.observe(carousel);
 new ResizeObserver(paintPhones).observe(carousel);
 paintPhones();
 

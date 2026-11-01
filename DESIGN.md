@@ -56,3 +56,5 @@ Wide-screen refinement: Chika copy and the assessment list now start with a boun
 FAQ is exempt from the shared split-column layout: its heading sits above an 800px centered stack of disclosure cards, shrinking to the common 32px mobile insets. The desktop route travels along the outer left margin instead of through the section center; mobile retains the outer edge route. Existing plus/minus transitions and native keyboard disclosures remain.
 
 Download now precedes the centered FAQ. The route excludes FAQ entirely and ends at the Download heading, before the FAQ begins. Download actions and QR configuration remain unchanged.
+
+Gallery transitions wait for decoded screen images and keep the current theme until every replacement is ready. Social cards now match the cinematic navy/mint site, with current Chika and a real app screen at 1200×630.

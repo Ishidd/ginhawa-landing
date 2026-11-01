@@ -19,7 +19,9 @@ const description = 'Check in with yourself, understand your stress, and discove
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="theme-color" content="#05070D" /><title>{title}</title><meta name="description" content={description} />
   <link rel="icon" href="/assets/favicon.png" type="image/png" /><link rel="preload" href="/assets/BricolageGrotesque.ttf" as="font" type="font/ttf" crossorigin /><link rel="preload" href="/screens/darkmode/1.webp" as="image" />
-  <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" /><meta property="og:image" content={Astro.site ? new URL('/assets/social-preview.png', Astro.site).href : '/assets/social-preview.png'} />
+  <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" /><meta property="og:image" content={Astro.site ? new URL('/assets/social-preview-v2.png', Astro.site).href : '/assets/social-preview-v2.png'} />
+  <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:type" content="image/png" /><meta property="og:image:alt" content="ginhawa. Find your calm, one moment at a time, with Chika and the app preview." />
+  <meta property="og:url" content={Astro.site?.href} /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={Astro.site ? new URL('/assets/social-preview-v2.png', Astro.site).href : '/assets/social-preview-v2.png'} />
   {Astro.site && <link rel="canonical" href={new URL('/', Astro.site).href} />}
 </head>
 <body>
