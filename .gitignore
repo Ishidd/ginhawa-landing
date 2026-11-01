@@ -29,3 +29,4 @@ public/screens/**/*.jpg
 Thumbs.db
 .vscode/
 .idea/
+.vercel
