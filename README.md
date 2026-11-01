@@ -14,7 +14,7 @@ Run `npm run build` and `npm run check`. Generated output is in `dist/`.
 
 Project: `ginhawa`. Framework: Astro. Install: `npm ci`. Build: `npm run build`. Output: `dist`. Node.js: 24.x.
 
-Set `SITE_URL=https://ginhawa-omega.vercel.app` for production canonical and social metadata. `vercel.json` includes the deployment headers and content security policy.
+Set `SITE_URL=https://ginhawa-ph.vercel.app` for production canonical and social metadata. `vercel.json` includes the deployment headers and content security policy.
 
 Copy `.env.example` only when configuring optional features. Firebase web configuration is used exclusively by account deletion. Never commit local environment files, Admin SDK credentials, or access tokens. Leave `PUBLIC_APK_URL` empty until a verified Android release exists; the QR and download action appear automatically when configured.
 
@@ -24,4 +24,4 @@ Source, required public assets, font licenses, dependency lockfile, verification
 
 The separately maintained admin portal is deployed at `https://ginhawa-admin.vercel.app`.
 
-The originally requested `ginhawa.vercel.app` alias was rejected by Vercel as already in use. The current production address is `https://ginhawa-omega.vercel.app`.
+The originally requested `ginhawa.vercel.app` alias was rejected by Vercel as already in use. The current production address is `https://ginhawa-ph.vercel.app`.
