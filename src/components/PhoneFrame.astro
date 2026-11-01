@@ -1,0 +1,8 @@
+---
+interface Props { src: string; alt: string; eager?: boolean }
+const {src, alt, eager = false} = Astro.props;
+---
+<span class="phone-frame">
+  <img src={src} alt={alt} width="1080" height="2400" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} draggable="false" />
+  <span class="phone-glass" aria-hidden="true"></span>
+</span>

@@ -1,0 +1,10 @@
+---
+const stops = ['home', 'why', 'chika', 'explore', 'personalized', 'download'];
+---
+<!-- Page-space path: measured from the real sections, ending at Download. -->
+<svg class="scroll-journey" aria-hidden="true" focusable="false">
+  <path class="journey-trail" />
+  <path class="journey-draw" />
+  {stops.map(id => <circle class="journey-node" data-stop={id} r="4" />)}
+  <g class="journey-tip"><image href="/assets/chika-icon-foreground.png" x="-36" y="-36" width="72" height="72" /></g>
+</svg>

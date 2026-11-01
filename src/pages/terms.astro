@@ -1,0 +1,6 @@
+---
+import LegalDocument from '../components/LegalDocument.astro';
+import legal from '../data/legal.json';
+const website = { title: 'This website', body: 'This public website is a product showcase. Screenshot browsing does not collect assessment answers, access student records, generate AI guidance, or book appointments. App accounts and participation follow the terms below. Website data practices are described in the Privacy policy.' };
+---
+<LegalDocument title="Terms & Conditions" description="Current ginhawa app terms, participation choices, AI guidance, and account responsibilities." introduction={legal.terms.introduction} sections={[website, ...legal.terms.sections]}/>

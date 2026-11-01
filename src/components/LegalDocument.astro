@@ -1,0 +1,11 @@
+---
+import InfoLayout from '../layouts/InfoLayout.astro';
+interface Props { title: string; description: string; introduction: string; sections: {title: string; body: string}[]; }
+const {title, description, introduction, sections} = Astro.props;
+const entries = sections.map((section, i) => ({...section, id: `section-${i + 1}`}));
+---
+<InfoLayout title={title} description={description} sections={entries} updated="1 November 2026">
+ <p class="document-intro">{introduction}</p>
+ {entries.map(section => <section class="document-section" id={section.id}><h2>{section.title}</h2>{section.body.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</section>)}
+ <div class="document-related"><a href="/terms/">Terms &amp; Conditions</a><a href="/privacy/">Privacy policy</a><a href="/delete-account/">Delete your account</a><a href="/disclaimer/">Mental health disclaimer</a></div>
+</InfoLayout>

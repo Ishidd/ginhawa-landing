@@ -1,0 +1,8 @@
+---
+interface Props { src: string; alt: string; class?: string; eager?: boolean; }
+const { src, alt, class: className = '', eager = false } = Astro.props;
+---
+<div class:list={['phone', className]}>
+  <div class="phone-speaker" aria-hidden="true"></div>
+  <img src={`/assets/${src}`} alt={alt} width="390" height="844" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
+</div>

@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+interface Props { title?: string; description?: string; }
+const { title = 'GINHAWA — A little more space to breathe.', description = site.description } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff3cc" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+    <link rel="preload" href="/assets/BricolageGrotesque.ttf" as="font" type="font/ttf" crossorigin />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GINHAWA" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={Astro.site ? new URL('/assets/social-preview.png', Astro.site).href : '/assets/social-preview.png'} />
+    <meta property="og:image:alt" content="GINHAWA. A little more space to breathe, with Chika, our red panda companion." />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-shell wrap">
+        <a class="wordmark" href="/" aria-label="GINHAWA home"><img src="/assets/favicon.png" width="40" height="40" alt="" />ginhawa<span class="wordmark-dot">.</span></a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation" aria-label="Open navigation" hidden><Icon name="menu" /></button>
+        <nav id="main-navigation" aria-label="Main navigation"><a href="/#explore">Features</a><a href="/#why">Our purpose</a><a href="/#why">About</a></nav>
+        <a class="button button-small nav-cta" href="/#explore">Explore the demo <Icon size={16} /></a>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="wrap footer-main"><div><a class="wordmark" href="/">ginhawa<span class="wordmark-dot">.</span></a><p>A little space for yourself.<br />A small step toward wellbeing.</p></div><div class="footer-links"><a href="/#explore">The app</a><a href="/#why">Our purpose</a><a href="/#chika">Meet Chika</a><a href="/#explore">Explore the demo</a>{site.contactEmail && <a href={`mailto:${site.contactEmail}`}>Contact GINHAWA</a>}</div><div class="footer-links"><a href="/delete-account/">Delete account</a><a href="/privacy/">Privacy policy</a><a href="/disclaimer/">Mental health disclaimer</a><a href="/#why">About the project</a></div></div>
+      <div class="wrap footer-bottom"><span>© {new Date().getFullYear()} GINHAWA · A BSCS capstone project.</span><span>Made with care, for student life.</span></div>
+    </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const nav = document.querySelector<HTMLElement>('#main-navigation');
+      if (toggle && header && nav) {
+        toggle.hidden = false;
+        header.classList.add('menu-ready');
+        const close = () => { toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Open navigation'); nav.classList.remove('is-open'); };
+        toggle.addEventListener('click', () => {
+          const open = toggle.getAttribute('aria-expanded') !== 'true';
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+          nav.classList.toggle('is-open', open);
+        });
+        nav.querySelectorAll('a').forEach(link => link.addEventListener('click', close));
+        document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { close(); toggle.focus(); } });
+      }
+    </script>
+  </body>
+</html>
+

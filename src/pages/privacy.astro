@@ -1,0 +1,6 @@
+---
+import LegalDocument from '../components/LegalDocument.astro';
+import legal from '../data/legal.json';
+const website = { title: 'Website privacy', body: 'The public website serves its own fonts, screenshots, and Chika artwork. It does not collect assessments, mood entries, account credentials, or consultation requests. Screenshot and theme selections remain in the current page; no website cookies, local storage, advertising, or analytics are implemented.\n\nThe hosting provider receives technical requests needed to serve the site, which may include IP addresses and browser information. Email, telephone, and external support links open another service with its own privacy practices. This website does not monitor those conversations.\n\nThe account-deletion page explains the app process. It does not accept requests or connect to student accounts. The app and related administrative data practices are described below.' };
+---
+<LegalDocument title="Privacy policy" description="How the ginhawa website, student app, AI guidance, and account-deletion process handle information." introduction="Website privacy and the current student-app notice, together in one place." sections={[website, ...legal.privacy.sections]}/>

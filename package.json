@@ -1,0 +1,27 @@
+{
+  "name": "ginhawa-product-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "check": "node scripts/check-build.mjs"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.8.2",
+    "astro": "7.4.2",
+    "firebase": "^13.1.0",
+    "gsap": "^3.15.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "qrcode": "^1.5.4"
+  }
+}

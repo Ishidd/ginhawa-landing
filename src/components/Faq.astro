@@ -1,0 +1,17 @@
+---
+const questions = [
+  { question: 'Who is ginhawa for?', answer: 'Tertiary students at STI College Caloocan. ginhawa is a BSCS capstone for student wellbeing.' },
+  { question: 'Is an assessment a diagnosis?', answer: 'No. Results support self-awareness and do not replace professional care.' },
+  { question: 'How are recommendations personalized?', answer: 'General guidance follows your assessment level. AI guidance also considers stress factors and mood context. AI can be mistaken or unavailable.' },
+  { question: 'Can I check in or book here?', answer: 'These features are in the Android app. Consultation requests depend on associate availability and confirmation.' },
+];
+---
+<section class="faq section wrap" id="faq" aria-labelledby="faq-title">
+  <div class="faq-heading reveal"><h2 id="faq-title">A little more <em>clarity.</em></h2></div>
+  <div class="faq-list">
+    {questions.map((item, i) => <details class="faq-card reveal">
+      <summary id={`faq-question-${i}`}><span>{item.question}</span><span class="faq-icon" aria-hidden="true"></span></summary>
+      <div class="faq-answer"><p>{item.answer}</p></div>
+    </details>)}
+  </div>
+</section>

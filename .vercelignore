@@ -1,0 +1,14 @@
+.git/
+.vercel/
+node_modules/
+dist/
+.astro/
+.env*
+.impeccable/
+tools/
+*.log
+asset-review.jpg
+screen-contact-sheet.jpg
+asset-manifest.json
+design-detector.json
+public/screens/**/*.jpg

@@ -1,0 +1,21 @@
+---
+import InfoLayout from '../layouts/InfoLayout.astro';
+import { supportEmail, supportMailto } from '../data/contacts';
+---
+<InfoLayout title="Delete your account" updated="1 November 2026" description="How to request operator-assisted deletion of your ginhawa account and associated student data.">
+
+
+    <p>ginhawa V1 uses operator-assisted account deletion. Submit your request in the app under Profile &amp; Settings → Account → Request Account Deletion. Confirm the consequences and verify your existing password or Google sign-in. A request is received only after the app confirms submission.</p>
+    <h2>What happens next</h2>
+    <p>An authorized Super Admin reviews ownership and separately confirms permanent deletion through the trusted local management system. We target completion within 30 calendar days after ownership verification. Submission alone does not delete or disable your account.</p>
+    <p>View Pending, Processing, or Failed status in the app while your account remains active. Once permanent processing begins, access ends. Interrupted cases are safely retried by the operator; Completed is recorded only after cleanup has been verified.</p>
+    <h2>What will be deleted</h2>
+    <p>Your sign-in account, profile and nested records, assessments and saved guidance, mood entries, stress factors and calibration, recommendations, feedback, problem reports, preferences, and linked consultation records and notifications are removed, along with identifiable derived reports. Other students’ information and shared guidance associate availability are preserved. Deletion cannot be undone through ginhawa.</p>
+    <p>Your student number remains reserved to prevent reassignment, without the deleted profile or account link. No wellness information is kept for research or analytics. A minimal completed audit, without student identity or wellness content, is retained for 90 days and then removed through local maintenance.</p>
+    <p>Disconnected devices and provider-held copies follow their actual deletion lifecycles. Deleting online application records cannot instantly erase every offline or service-held copy.</p>
+    <h2>If you cannot sign in</h2>
+    <p>Try Forgot Password in ginhawa or recover access to the Google account you originally used. If that does not restore access, email <a href={supportMailto}>{supportEmail}</a> for operator-assisted recovery. An authorized operator must verify ownership through the approved recovery procedure. A student number alone is insufficient. Never send your password or unnecessary identity documents.</p>
+    <p role="status">This page explains the V1 process; it does not collect sign-in credentials or submit requests. For support or follow-up, contact <a href={supportMailto}>{supportEmail}</a>. The mailbox is not an emergency-support service.</p>
+    <p>Read the <a href="/privacy/">website privacy notice</a> and the app’s Privacy Policy for the applicable information handling.</p>
+
+</InfoLayout>

@@ -1,0 +1,53 @@
+---
+import '../styles/cinematic.css';
+import PhoneFrame from '../components/PhoneFrame.astro';
+import ScreenShowcase from '../components/ScreenShowcase.astro';
+import AiRecommendations from '../components/AiRecommendations.astro';
+import ScrollJourney from '../components/ScrollJourney.astro';
+import Faq from '../components/Faq.astro';
+import Footer from '../components/Footer.astro';
+import ValidationBadge from '../components/ValidationBadge.astro';
+import { apkUrl } from '../data/showcase';
+import { createRequire } from 'node:module';
+const QRCode = createRequire(import.meta.url)('qrcode');
+const qr = apkUrl ? await QRCode.toDataURL(apkUrl, {width: 180, margin: 2, errorCorrectionLevel: 'M'}) : '';
+const title = 'ginhawa — Find your calm, one moment at a time.';
+const description = 'Check in with yourself, understand your stress, and discover small steps toward a more balanced day. Meet ginhawa, your student wellbeing companion.';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="theme-color" content="#05070D" /><title>{title}</title><meta name="description" content={description} />
+  <link rel="icon" href="/assets/favicon.png" type="image/png" /><link rel="preload" href="/assets/BricolageGrotesque.ttf" as="font" type="font/ttf" crossorigin /><link rel="preload" href="/screens/darkmode/1.webp" as="image" />
+  <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" /><meta property="og:image" content={Astro.site ? new URL('/assets/social-preview.png', Astro.site).href : '/assets/social-preview.png'} />
+  {Astro.site && <link rel="canonical" href={new URL('/', Astro.site).href} />}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a><div class="sky" aria-hidden="true"></div>
+  <header class="masthead"><a href="#home" class="brand" aria-label="ginhawa home"><img src="/assets/favicon.png" alt="" width="32" height="32" />ginhawa<span>.</span></a><nav aria-label="Main navigation"><a href="#why">Our purpose</a><a href="#chika">Meet Chika</a><a href="#explore">The experience</a><a href="#personalized">AI guidance</a><a href="#faq">FAQ</a></nav><a class="header-download" href="#download">Get ginhawa <span aria-hidden="true">↗</span></a></header>
+  <main id="main">
+    <ScrollJourney />
+    <section id="home" class="hero section" aria-labelledby="hero-title">
+      <div class="hero-orbit" aria-hidden="true"></div>
+      <div class="hero-copy"><h1 id="hero-title">Find your calm,<br /><em>one moment<br /> at a time.</em></h1><p>Understand your stress.<br class="desktop-break" /> Find small steps toward a calmer day.</p><div class="hero-actions"><a class="button" href={apkUrl || '#download'}>{apkUrl ? 'Download for Android' : 'Get ginhawa for Android'}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5" /></svg></a><a class="text-link" href="#explore">Explore ginhawa <span aria-hidden="true">↗</span></a></div><ValidationBadge /></div>
+      <div class="hero-composition"><div class="hero-light" aria-hidden="true"></div><div class="hero-phone"><PhoneFrame src="/screens/darkmode/1.webp" alt="ginhawa’s dark-mode homepage with daily mood check-in and stress assessments." eager /></div><div class="hero-companion"><img class="chika-animation" src="/assets/chika-still.webp" data-animated="/assets/chika-loop.webp" alt="Chika, your friendly red panda companion." width="420" height="656" /><span>A little company.<br />A little more calm.</span></div></div>
+    </section>
+    <section class="purpose section wrap balanced-layout" id="why" aria-labelledby="purpose-title">
+      <div class="purpose-copy reveal"><h2 id="purpose-title">Understand your stress.<br /> <em>Find your next step.</em></h2><p>Built on established psychological assessment tools, professionally validated general guidance, and AI-powered adaptive recommendations tailored to individual needs.</p><a class="text-link" href="#explore" data-focus-screen="assessment">Explore the self-assessments <span aria-hidden="true">↗</span></a></div>
+      <div class="assessment-overview reveal">
+        <div><h3>PSS-10 <span>Perceived stress · 10 questions</span></h3></div>
+        <div><h3>Kessler K6 <span>Psychological distress · 6 questions</span></h3></div>
+        <div><h3>PSQ-20 <span>Perceived stress · 20 questions</span></h3></div>
+        <p class="assessment-note">For self-awareness, never a diagnosis.</p>
+      </div>
+    </section>
+    <section class="chika-section section wrap balanced-layout" id="chika" aria-labelledby="chika-title"><div class="chika-world reveal"><div class="chika-halo" aria-hidden="true"></div><span class="chika-orbit" aria-hidden="true"></span><img class="chika-animation" src="/assets/chika-front-bow-still.webp" data-still="/assets/chika-front-bow-still.webp" data-animated="/assets/chika-front-bow.webp" width="480" height="515" alt="Chika gives a friendly bow, wearing the STI College shirt." loading="lazy" /><span class="chika-signature">Hi, I’m Chika.</span></div><div class="chika-copy reveal"><h2 id="chika-title">A little company.<br /> <em>Along the way.</em></h2><p>Meet Chika, your companion for check-ins, reflection, and small steps forward.</p><a class="text-link" href="#explore" data-focus-screen="chika">Say hello to Chika <span aria-hidden="true">↗</span></a></div></section>
+    <ScreenShowcase />
+    <AiRecommendations />
+    <section class="download section" id="download" aria-labelledby="download-title"><div class="download-glow" aria-hidden="true"></div><div class="download-layout wrap balanced-layout"><div class="download-copy"><h2 class="reveal" id="download-title">Make room <em>for a calmer day.</em></h2><p>A little space to breathe. Wherever your day takes you.</p></div><div class="download-action reveal">{apkUrl ? <><a class="button" href={apkUrl}>Download for Android <span aria-hidden="true">↓</span></a><div class="qr"><img src={qr} width="180" height="180" alt="Scan to download the ginhawa Android APK" /><span>Scan with your Android camera</span></div><p class="installation">Download the APK, open it on your Android device, and follow the installation prompts. If asked, allow installation from your browser, then turn that permission off afterward.</p></> : <><h3 class="release-title">Your space is on its way.</h3><p class="release-copy">The Android download and QR code will appear here at release.</p><a href="#explore" class="button">Explore the app <span aria-hidden="true">↗</span></a></>}</div></div></section>
+    <Faq />
+  </main>
+  <Footer />
+  <script src="../scripts/cinematic.ts"></script>
+</body>
+</html>

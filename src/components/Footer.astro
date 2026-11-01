@@ -1,0 +1,14 @@
+---
+import { supportEmail, supportMailto, crisisContact } from '../data/contacts';
+---
+<footer class="footer wrap">
+ <div class="footer-main">
+  <div class="footer-identity"><a href="/#home" class="brand" aria-label="ginhawa home">ginhawa<span>.</span></a><p>A little space to breathe.</p></div>
+  <nav class="footer-columns" aria-label="Footer">
+   <div><h2>Product</h2><a href="/#explore">Features</a><a href="/#personalized">AI guidance</a></div>
+   <div><h2>Community</h2><a href="/support-resources/">Support resources</a><a class="footer-contact" href={supportMailto}>{supportEmail}</a><a class="footer-contact crisis-contact" href={crisisContact.href}><span>{crisisContact.name}</span><span>{crisisContact.phone}</span></a></div>
+   <div><h2>Legal</h2><a href="/terms/">Terms &amp; Conditions</a><a href="/privacy/">Privacy policy</a><a href="/delete-account/">Delete your account</a><a href="/disclaimer/">Mental health disclaimer</a></div>
+  </nav>
+ </div>
+ <div class="footer-meta"><p>© {new Date().getFullYear()} ginhawa <span>Independent student capstone · STI College Caloocan</span></p><a class="back-top" href="#main">Back to top<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div>
+</footer>

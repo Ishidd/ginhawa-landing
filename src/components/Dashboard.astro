@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+const weeks = [34, 52, 44, 70, 48, 82, 60, 74, 91, 72, 84, 66];
+---
+<div class="dashboard" role="img" aria-label="Illustrative associate dashboard using synthetic data: 120 example check-ins, 48 example assessments, and 8 example consultation requests. These are not actual usage figures or student records.">
+  <div class="dashboard-top"><span class="dashboard-brand"><Icon name="leaf" /> ginhawa <small>ADMINISTRATION</small></span><span class="demo-pill">Synthetic demo</span></div>
+  <div class="dashboard-body">
+    <aside class="dashboard-sidebar" aria-hidden="true"><span class="dash-active">Overview</span><span>Students</span><span>Assessments</span><span>Insights</span><span>Consultations</span><div class="sidebar-bottom"><Icon name="shield" /> Authorized personnel</div></aside>
+    <div class="dashboard-content">
+      <div class="dashboard-heading"><div><span class="small-label">ASSOCIATE WORKSPACE</span><h3>A clearer view.<br />A more thoughtful response.</h3></div><span class="dashboard-date">Sample period<br /><strong>Last 30 days</strong></span></div>
+      <div class="dashboard-stats"><div><span>Mood check-ins</span><strong>120</strong></div><div><span>Assessments</span><strong>48</strong></div><div><span>Consultation requests</span><strong>8</strong></div></div>
+      <div class="dashboard-chart"><div><strong>Assessment participation</strong><span>Example activity · not clinical outcomes</span></div><div class="chart-bars" aria-hidden="true">{weeks.map((height, i) => <span style={`--bar:${height}%`} class:list={[i > 8 && 'last-bars']}></span>)}</div><div class="chart-labels"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span></div></div>
+      <div class="dashboard-bottom"><span><i></i> Consultation management</span><span>Review requests <Icon size={16} /></span></div>
+    </div>
+  </div>
+</div>

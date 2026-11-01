@@ -1,0 +1,31 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+.astro/
+.vercel/
+coverage/
+test-results/
+playwright-report/
+*.log
+*.tsbuildinfo
+
+# Local configuration and credentials
+.env*
+!.env.example
+*.pem
+*.key
+*service-account*.json
+*serviceAccount*.json
+
+# Local design/capture artifacts and original screenshot duplicates
+.impeccable/
+tools/
+asset-review.jpg
+screen-contact-sheet.jpg
+asset-manifest.json
+design-detector.json
+public/screens/**/*.jpg
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

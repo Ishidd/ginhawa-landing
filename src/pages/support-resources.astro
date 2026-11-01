@@ -1,0 +1,11 @@
+---
+import InfoLayout from '../layouts/InfoLayout.astro';
+import {supportEmail, supportMailto, crisisContact} from '../data/contacts';
+---
+<InfoLayout title="Support resources" description="App support, college guidance, and verified NCMH contact information.">
+<p>A way to reach the right support.</p>
+<section class="support-resource"><h2>ginhawa support</h2><p>For app questions, account recovery, deletion, or privacy concerns.</p><a class="contact-link" href={supportMailto}>{supportEmail}</a><p class="contact-note">Never send passwords or unnecessary wellbeing details. This mailbox is not an emergency service.</p></section>
+<section class="support-resource"><h2>{crisisContact.name}</h2><p>Phone support for mental health and emotional distress in the Philippines.</p><a class="contact-link" href={crisisContact.href}>{crisisContact.phone}</a><a class="text-link" href={crisisContact.website}>Official NCMH page <span aria-hidden="true">↗</span></a></section>
+<section class="support-resource"><h2>Your college guidance team</h2><p>Contact STI College Caloocan through its usual school channels. In-app consultation requests require associate availability and confirmation.</p></section>
+<p>For immediate danger, contact local emergency services or go to the nearest emergency department.</p>
+</InfoLayout>

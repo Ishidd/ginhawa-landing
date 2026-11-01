@@ -1,0 +1,27 @@
+<section class="ai-section section wrap balanced-layout" id="personalized" aria-labelledby="ai-title">
+ <div class="ai-copy reveal">
+  <h2 id="ai-title">Guidance that<br /> <em>starts with you.</em></h2>
+  <p>With AI enabled, your assessment, stress factors, and mood context help shape practical suggestions.</p>
+
+  <ul class="ai-context" aria-label="What shapes your recommendations"><li>Assessment</li><li>Stress factors</li><li>Mood</li></ul>
+  <p class="ai-boundary">Optional support. Never a diagnosis.</p>
+  <div class="ai-demo-controls"><p>Choose an example</p>   <div class="ai-factors" role="group" aria-label="Explore an example stress factor"><button data-factor="studies" aria-pressed="true">Studies</button><button data-factor="relationships" aria-pressed="false">Relationships</button><button data-factor="finances" aria-pressed="false">Finances</button></div></div>
+ </div>
+ <div class="ai-visual reveal">
+  <div class="ai-model guidance-orb" role="group" aria-label="Interactive adaptive guidance orb">
+   <svg class="orb-fallback" viewBox="0 0 600 440" aria-hidden="true"><defs><radialGradient id="orb-static-light" cx="35%" cy="30%"><stop stop-color="#a5e1d1"/><stop offset=".3" stop-color="#427d9f"/><stop offset=".75" stop-color="#142f51"/><stop offset="1" stop-color="#081225"/></radialGradient></defs><path d="M100 130Q140 220 300 220M500 130Q440 220 300 220M300 370Q350 290 300 220"/><circle cx="300" cy="220" r="92" fill="url(#orb-static-light)"/><ellipse cx="300" cy="220" rx="156" ry="62" transform="rotate(-24 300 220)"/><ellipse cx="300" cy="220" rx="140" ry="80" transform="rotate(58 300 220)"/><ellipse cx="300" cy="220" rx="158" ry="60" transform="rotate(25 300 220)"/><circle cx="100" cy="130" r="5"/><circle cx="500" cy="130" r="5"/><circle cx="300" cy="370" r="5"/></svg>
+   <div class="adaptive-orb-root" tabindex="0" role="group" aria-label="Rotate the adaptive guidance orb" aria-describedby="orb-keyboard-help"></div>
+   <button class="orb-input orb-input-assessment" aria-pressed="true">Assessment</button><button class="orb-input orb-input-factors" aria-pressed="false">Stress factors</button><button class="orb-input orb-input-mood" aria-pressed="false">Mood</button>
+  </div>
+
+  <div class="ai-example orb-recommendation">
+   <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6Z"/></svg>Illustrative suggestion</p>
+   <p id="ai-example-text" aria-live="polite">Break one assignment into a smaller first step.</p>
+
+  </div>
+  <p id="orb-context-description" class="orb-context-description" aria-live="polite">Your result sets the starting point.</p><div class="orb-controls"><p class="model-instructions">Drag to rotate · Tap to pulse</p><button data-orb-reset>Reset view</button></div><p class="sr-only" id="orb-keyboard-help">Use arrow keys to rotate, Enter or Space to pulse, and R to reset.</p>
+ </div>
+
+
+</section>
+<script src="../scripts/ai-model.ts"></script>

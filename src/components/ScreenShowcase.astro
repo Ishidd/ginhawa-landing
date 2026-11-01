@@ -1,0 +1,29 @@
+---
+import PhoneFrame from './PhoneFrame.astro';
+import { screens, screenPath } from '../data/showcase';
+---
+<section class="showcase section" id="explore" aria-labelledby="explore-title">
+  <div class="showcase-layout wrap balanced-layout">
+  <div class="showcase-context">
+  <div class="section-intro reveal"><h2 id="explore-title">Your space<br /> <em>to breathe.</em></h2><p>Explore the tools. Find what feels helpful.</p></div>
+  <div class="theme-switch reveal" role="group" aria-label="App screenshot theme"><span class="theme-highlight" aria-hidden="true"></span><button data-theme="dark" aria-pressed="true">Dark experience</button><button data-theme="light" aria-pressed="false">Light experience</button></div>
+  <div class="feature-menu" role="group" aria-label="Choose an app feature">
+    <button data-focus-screen="assessment" aria-pressed="false">Self-assessments <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    <button data-focus-screen="recommendations" aria-pressed="false">Wellbeing guidance <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    <button data-focus-screen="history" aria-pressed="false">Personal history <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    <button data-focus-screen="consultation" aria-pressed="false">Consultation requests <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+  </div>
+  </div>
+  <div class="showcase-stage">
+  <div class="screen-carousel" role="region" aria-roledescription="carousel" aria-label="Explore nine ginhawa screens" tabindex="0">
+    <div class="orbit-track" aria-hidden="true"></div>
+    {screens.map((screen, i) => <button class="gallery-phone" data-screen-id={screen.id} aria-label={`Focus ${screen.title}`} aria-pressed={i === 0 ? 'true' : 'false'} tabindex={i < 3 || i > 6 ? 0 : -1} style={`--initial:${i}`}><PhoneFrame src={screenPath(screen, 'dark')} alt={`ginhawa: ${screen.title}`} /></button>)}
+  </div>
+  <div class="gallery-bottom reveal">
+    <p class="sr-only" id="screen-announcement" aria-live="polite" aria-atomic="true">Screen 1 of 9: Daily check-in</p>
+    <div class="gallery-controls"><div class="gallery-buttons"><button data-step="-1" aria-label="Previous screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12" /></svg></button><span class="gallery-count"><b>01</b> / 09</span><button data-step="1" aria-label="Next screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6M4 12h12" /></svg></button></div><span class="gesture-hint">Swipe, use the arrows, or choose a phone</span></div>
+  </div>
+  </div>
+  </div>
+  <noscript><p class="no-script">Browse the original screens: {screens.map(screen => <a href={screenPath(screen, 'dark')}>{screen.title} · </a>)}</p></noscript>
+</section>
