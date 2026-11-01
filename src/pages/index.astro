@@ -52,7 +52,6 @@ const description = 'Check in with yourself, understand your stress, and discove
           <p class="installation">Version {androidRelease.version}</p>
           <div class="qr"><a href="/download-qr.png" download="ginhawa-android-qr.png" aria-label="Save the GINHAWA Android download QR code"><img src="/download-qr.png" width="180" height="180" alt="Scan to download the ginhawa Android APK" /></a><span>Scan with your Android camera · Tap to save</span></div>
           <p class="installation">Open the APK on your Android device and follow the installation prompts. If asked, allow installation from your browser, then turn that permission off afterward. Keep GINHAWA installed to preserve your data.</p>
-          <details class="download-integrity"><summary>Verify your download</summary><p>SHA-256</p><code>{androidRelease.sha256}</code></details>
         </> : <>
           <h3 class="release-title">Your space is on its way.</h3><p class="release-copy">The Android download and QR code will appear here at release.</p><a href="#explore" class="button">Explore the app <span aria-hidden="true">↗</span></a>
         </>}</div>
@@ -66,9 +65,7 @@ const description = 'Check in with yourself, understand your stress, and discove
 </html>
 
 <style>
-  .download-integrity { max-width: 36rem; margin-top: 1.5rem; text-align: left; }
-  .download-integrity summary { cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
-  .download-integrity summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
-  .download-integrity p { margin: 1rem 0 .5rem; }
-  .download-integrity code { overflow-wrap: anywhere; font-size: .8rem; }
+  .download-action { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .download-action > .button { align-self: center; }
+  .download-action > .installation { max-width: 42ch; }
 </style>
