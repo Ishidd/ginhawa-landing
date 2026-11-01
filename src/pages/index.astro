@@ -11,7 +11,7 @@ import { apkUrl } from '../data/showcase';
 import { createRequire } from 'node:module';
 const QRCode = createRequire(import.meta.url)('qrcode');
 const qr = apkUrl ? await QRCode.toDataURL(apkUrl, {width: 180, margin: 2, errorCorrectionLevel: 'M'}) : '';
-const title = 'ginhawa — Find your calm, one moment at a time.';
+const title = 'ginhawa | Find your calm, one moment at a time.';
 const description = 'Check in with yourself, understand your stress, and discover small steps toward a more balanced day. Meet ginhawa, your student wellbeing companion.';
 ---
 <!doctype html>
