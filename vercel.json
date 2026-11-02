@@ -3,9 +3,9 @@
   "buildCommand": "npm run build",
   "build": {
     "env": {
-      "PUBLIC_APK_URL": "https://github.com/Ishidd/ginhawa-landing/releases/download/android-v1.0.0-10/ginhawa-1.0.0-10.apk",
-      "PUBLIC_APK_SHA256": "9844e021135b31aa4891ce7f16209ee7ffbef0a45c1df10fac5e23c4ae227f5b",
-      "PUBLIC_APK_VERSION": "1.0.0 (10)"
+      "PUBLIC_APK_URL": "https://github.com/Ishidd/ginhawa-landing/releases/download/android-v1.0.0-12/ginhawa-1.0.0-12.apk",
+      "PUBLIC_APK_SHA256": "9cf9162f2acabb6400df2fca86a0a0ad15dc399625b4ba4e82463d9b1e84153c",
+      "PUBLIC_APK_VERSION": "1.0.0 (12)"
     }
   },
   "outputDirectory": "dist",
