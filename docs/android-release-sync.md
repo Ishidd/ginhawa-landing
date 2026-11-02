@@ -28,12 +28,26 @@ The owner explicitly approved this permission scope on 2 November 2026. The dedi
 
 ## Validation
 
-Run `node --test scripts/android-release.test.mjs scripts/github-android-release.test.mjs scripts/firestore-android-release.test.mjs scripts/android-apk.test.mjs`.
+Run `node --test scripts/android-release.test.mjs scripts/github-android-release.test.mjs scripts/firestore-android-release.test.mjs scripts/android-apk.test.mjs scripts/release-note-history.test.mjs`.
 
 Tests cover stable metadata validation, notes limits, workflow identity checks, policy preservation, duplicate/old releases, changed bytes, fixed-path writes, missing records, concurrency conflicts, transport errors and verified read-back. The public website manifest remains independent of the added user-facing notes.
 
 Production read-back on 2 November 2026 confirmed build 13 with OTA enabled, optional updates, minimum supported build 1, the expected checksum and all five user-facing notes. The document is publicly readable and matches the website manifest. A read-only replay plan returned unchanged; no extra production write was made for that check. The deployed Firestore rules separately include recommendationProgress (rules release updated 2026-11-02T14:34:51.549292Z). Phone acceptance remains with the owner.
 
 Future app feature rules and backend changes must be deployed before publishing their stable release. This workflow changes release metadata only; it does not deploy feature rules or publish drafts. To withdraw an offer, an operator can set otaEnabled to false; rerunning the same build preserves that pause. Publishing a higher stable build is a new OTA approval.
+
+## Cumulative app update notes (3 November 2026)
+
+The optional `releaseNotesByBuild` field maps Android build numbers to their original readable note lists in the same `appReleases/androidStable` document. `releaseNotes` remains the latest release's notes, so existing app versions stay compatible. Phones continue to perform the existing single-document check; they do not query GitHub or read additional Firestore records.
+
+When notes are requested, the workflow reads published, stable Android releases from GitHub (including pagination), excluding drafts, prereleases, future builds, and releases without an uploaded Android APK. It backfills usable older notes and merges them with stored history. Previously approved history and current manually edited notes take precedence over later edits to older GitHub release descriptions. Missing or invalid legacy bullets are omitted rather than invented.
+
+A same-build workflow rerun may add missing history through a history-only conditional update. It preserves `otaEnabled`, the current APK identity, `releaseNotes`, and required-update policy. Once the history matches, subsequent reruns remain no-ops. A new release still follows the existing approval and integrity checks. No IAM scope, Firestore rules, or additional document access is needed.
+
+The app selects changes newer than the installed build, presents the newest first, cleans technical packaging text, and removes repeated notes regardless of case, spacing, or terminal punctuation. When an earlier missed release contributes notes, the heading reads **What's new since your version**. Absent or damaged optional history falls back to the latest notes without blocking an otherwise valid update.
+
+History is validated to stay below 500 KiB of serialized text, with at most 1,000 build entries and at most ten GitHub listing pages. The workflow reports an explicit error rather than silently truncating history if archival becomes necessary. These limits are well above the current release count while keeping metadata in the existing document.
+
+Local verification: 16 release-automation tests, 37 Flutter updater/history tests, and clean scoped Flutter analysis. Logs are in the workspace `audits/release-note-history-*-2026-11-03.log` files. Deployment uses main and the existing manual dispatch to backfill the current stable record; Flutter support is included in signed build 14. The APK draft is published separately by the owner. Already-installed older APKs continue using their existing latest-notes display until upgraded.
 
 Primary references: [Google keyless GitHub authentication](https://github.com/google-github-actions/auth), [GitHub deployment federation](https://docs.cloud.google.com/iam/docs/workload-identity-federation-with-deployment-pipelines), [Firestore IAM and permissions](https://firebase.google.com/docs/firestore/security/iam), [per-database IAM conditions](https://docs.cloud.google.com/firestore/native/docs/manage-databases).

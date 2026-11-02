@@ -87,7 +87,58 @@ export async function readPublishedAndroidRelease({ tag, verifyApk = false, incl
       if (directory) await rm(directory, { recursive: true, force: true });
     }
   }
-  return includeNotes ? { ...metadata, releaseNotes: releaseNotes(release.body) } : metadata;
+  if (!includeNotes) return metadata;
+  const notes = releaseNotes(release.body);
+  const history = await readPublishedReleaseNotes(buildNumber(metadata), headers);
+  return { ...metadata, releaseNotes: notes,
+    releaseNotesByBuild: { ...history, [buildNumber(metadata)]: notes } };
+}
+
+export function validateNoteHistory(history, latestBuild) {
+  assert.ok(history && typeof history === 'object' && !Array.isArray(history)
+    && Object.keys(history).length <= 1000, 'Invalid release-note history');
+  for (const [key, notes] of Object.entries(history)) {
+    const build = Number(key);
+    assert.ok(/^[1-9]\d*$/.test(key) && Number.isSafeInteger(build) && build <= latestBuild
+      && Array.isArray(notes) && notes.length >= 1 && notes.length <= 20
+      && notes.every(note => typeof note === 'string' && note.trim() && note.length <= 500
+        && !/[\x00-\x1f]/.test(note)), 'Invalid release-note history entry');
+  }
+  // ponytail: keep one phone read and the existing fixed-document identity.
+  // Archive history separately if it eventually approaches Firestore's size limit.
+  assert.ok(Buffer.byteLength(JSON.stringify(history), 'utf8') <= 500 * 1024,
+    'Release-note history needs archival before it can grow further');
+  return history;
+}
+
+export function publishedReleaseNotes(releases, latestBuild) {
+  const history = {};
+  for (const release of releases) {
+    const match = release.tag_name?.match(tagPattern);
+    if (!match || release.draft || release.prerelease || !release.published_at
+      || String(Number(match[2])) !== match[2]) continue;
+    const build = Number(match[2]);
+    if (!Number.isSafeInteger(build) || build < 1 || build > latestBuild) continue;
+    const filename = `ginhawa-${match[1]}-${build}.apk`;
+    if (!release.assets?.some(asset => asset.name === filename && asset.state === 'uploaded' && asset.size > 0)) continue;
+    let notes;
+    try { notes = releaseNotes(release.body); }
+    catch { continue; } // Legacy releases without readable bullets don't block a verified update.
+    if (history[build]) assert.deepEqual(history[build], notes, 'Conflicting release notes for one Android build');
+    history[build] = notes;
+  }
+  return validateNoteHistory(history, latestBuild);
+}
+
+export async function readPublishedReleaseNotes(latestBuild, headers, request = response) {
+  const releases = [];
+  for (let page = 1; page <= 10; page++) {
+    const batch = await (await request(`https://api.github.com/repos/${repository}/releases?per_page=100&page=${page}`, headers)).json();
+    assert.ok(Array.isArray(batch), 'Invalid GitHub release history');
+    releases.push(...batch);
+    if (batch.length < 100) return publishedReleaseNotes(releases, latestBuild);
+  }
+  throw Error('Release history exceeds the supported pagination limit');
 }
 export async function readLiveRelease() {
   const result = await fetch(liveManifestUrl, { cache: 'no-store', signal: AbortSignal.timeout(30_000) });

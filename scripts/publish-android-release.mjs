@@ -9,7 +9,7 @@ if (process.env.GITHUB_EVENT_NAME === 'release') {
   assert.equal(process.env.GITHUB_REF, 'refs/tags/' + event.release.tag_name, 'Release event/tag mismatch');
 }
 const candidate = await readPublishedAndroidRelease({ tag: event.release?.tag_name, verifyApk: true, verifyAndroidIdentity: true, includeNotes: true });
-const { releaseNotes, ...release } = candidate;
+const { releaseNotes, releaseNotesByBuild, ...release } = candidate;
 const current = await readLiveRelease();
 const token = releaseAccessToken();
 const document = await readReleaseDocument(token);
