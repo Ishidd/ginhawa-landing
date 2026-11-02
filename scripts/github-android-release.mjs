@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { mkdtemp, open, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { verifyAndroidApk } from './android-apk.mjs';
 import { publicAndroidRelease } from '../src/data/android-release.mjs';
 
 const repository = 'Ishidd/ginhawa-landing';
@@ -7,12 +11,14 @@ const tagPattern = /^android-v(\d+\.\d+\.\d+)-(\d+)$/;
 export const liveManifestUrl = 'https://ginhawa-ph.vercel.app/android-release.json';
 export function buildNumber(release) {
   const build = Number(release.version.match(/\((\d+)\)$/)?.[1]);
-  assert.ok(Number.isSafeInteger(build) && build > 0, 'Invalid Android build number');
+  assert.ok(Number.isSafeInteger(build) && build > 0 && build <= 2100000000, 'Invalid Android build number');
   return build;
 }
 export function releaseMetadata(release, checksums) {
   const match = release.tag_name?.match(tagPattern);
   assert.ok(match && !release.draft && !release.prerelease && release.published_at, 'A published stable Android release is required');
+  assert.equal(String(Number(match[2])), match[2], 'Build numbers must use canonical decimal notation');
+  assert.ok(match[1].length <= 64, 'Version name too long');
   const filename = `ginhawa-${match[1]}-${match[2]}.apk`;
   const apk = release.assets?.find(asset => asset.name === filename);
   assert.ok(apk?.state === 'uploaded' && apk.size > 0 && apk.size < 2 ** 31, 'Missing or invalid release APK');
@@ -37,7 +43,7 @@ async function response(url, headers = {}) {
   assert.equal(new URL(result.url).protocol, 'https:', 'Release downloads must stay on HTTPS');
   return result;
 }
-export async function readPublishedAndroidRelease({ tag, verifyApk = false } = {}) {
+export async function readPublishedAndroidRelease({ tag, verifyApk = false, includeNotes = false, verifyAndroidIdentity = false } = {}) {
   const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'GINHAWA-website-release', ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }) };
   const api = `https://api.github.com/repos/${repository}/releases`;
   let release;
@@ -56,20 +62,32 @@ export async function readPublishedAndroidRelease({ tag, verifyApk = false } = {
   const checksums = await (await response(sums.browser_download_url)).text();
   assert.ok(checksums.length <= 4096, 'Oversized checksum response');
   const metadata = releaseMetadata(release, checksums);
-  if (verifyApk) {
-    const apk = await response(metadata.url);
-    const hash = createHash('sha256');
-    const expectedSize = release.assets.find(asset => asset.browser_download_url === metadata.url).size;
-    let bytes = 0;
-    for await (const chunk of apk.body) {
-      bytes += chunk.length;
-      assert.ok(bytes <= expectedSize, 'APK exceeds its published size');
-      hash.update(chunk);
+  if (verifyApk || verifyAndroidIdentity) {
+    const directory = verifyAndroidIdentity ? await mkdtemp(join(tmpdir(), 'ginhawa-release-')) : null;
+    let file;
+    try {
+      const path = directory && join(directory, 'release.apk');
+      if (path) file = await open(path, 'wx');
+      const apk = await response(metadata.url);
+      const hash = createHash('sha256');
+      const expectedSize = release.assets.find(asset => asset.browser_download_url === metadata.url).size;
+      let bytes = 0;
+      for await (const chunk of apk.body) {
+        bytes += chunk.length;
+        assert.ok(bytes <= expectedSize, 'APK exceeds its published size');
+        hash.update(chunk);
+        if (file) await file.writeFile(chunk);
+      }
+      assert.equal(bytes, expectedSize, 'Incomplete APK download');
+      assert.equal(hash.digest('hex'), metadata.sha256, 'Public APK checksum mismatch');
+      if (file) { await file.close(); file = null; }
+      if (path) await verifyAndroidApk(path, metadata);
+    } finally {
+      if (file) await file.close();
+      if (directory) await rm(directory, { recursive: true, force: true });
     }
-    assert.equal(bytes, expectedSize, 'Incomplete APK download');
-    assert.equal(hash.digest('hex'), metadata.sha256, 'Public APK checksum mismatch');
   }
-  return metadata;
+  return includeNotes ? { ...metadata, releaseNotes: releaseNotes(release.body) } : metadata;
 }
 export async function readLiveRelease() {
   const result = await fetch(liveManifestUrl, { cache: 'no-store', signal: AbortSignal.timeout(30_000) });
@@ -77,4 +95,20 @@ export async function readLiveRelease() {
   assert.ok(result.ok, `Live release check failed (${result.status})`);
   const release = await result.json();
   return publicAndroidRelease({ PUBLIC_APK_URL: release.url, PUBLIC_APK_SHA256: release.sha256, PUBLIC_APK_VERSION: release.version });
+}
+
+// Only user-facing bullet points enter the app, never the draft testing footer.
+export function releaseNotes(body) {
+  assert.ok(typeof body === 'string' && body.length <= 65536, 'Missing or oversized release notes');
+  const notes = [];
+  for (const line of body.split(/\r?\n/)) {
+    if (notes.length && /^(?:#{1,6}\s|\*\*Draft|\*\*Before)/i.test(line.trim())) break;
+    const match = /^[-*]\s+(.+)$/.exec(line.trim());
+    if (!match) continue;
+    const text = match[1].replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, '').trim();
+    assert.ok(text.length > 0 && text.length <= 500 && !/[\x00-\x1f]/.test(text), 'Invalid release note');
+    notes.push(text);
+  }
+  assert.ok(notes.length >= 1 && notes.length <= 20, 'Provide 1–20 user-facing release-note bullets');
+  return notes;
 }
