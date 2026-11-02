@@ -13,7 +13,8 @@ export async function verifyAndroidApk(path, metadata, { sdkRoot = process.env.A
   const tools = join(sdkRoot, 'build-tools', versions.at(-1));
   const java = process.env.JAVA_HOME ? join(process.env.JAVA_HOME, 'bin', process.platform === 'win32' ? 'java.exe' : 'java') : 'java';
   const { stdout: signature } = await run(java, ['-jar', join(tools, 'lib', 'apksigner.jar'), 'verify', '--print-certs', path], { timeout: 60000 });
-  const fingerprints = [...signature.matchAll(/^Signer #\d+ certificate SHA-256 digest: ([a-fA-F0-9]{64})$/gm)].map(match => match[1].toLowerCase());
+  // Build Tools 37 label signers by signature scheme; earlier versions use Signer #N.
+  const fingerprints = [...new Set([...signature.matchAll(/^.*certificate SHA-256 digest:\s*([a-fA-F0-9]{64})\s*$/gm)].map(match => match[1].toLowerCase()))];
   assert.deepEqual(fingerprints, [releaseCertificate], 'APK must use the existing GINHAWA release certificate');
   const { stdout: badging } = await run(join(tools, process.platform === 'win32' ? 'aapt.exe' : 'aapt'), ['dump', 'badging', path], { timeout: 30000 });
   const identity = /^package: name='([^']+)' versionCode='([^']+)' versionName='([^']+)'/m.exec(badging);
