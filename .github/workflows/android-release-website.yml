@@ -1,0 +1,39 @@
+name: Update website for published Android release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild even when the current release is already live
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-release-website
+  cancel-in-progress: false
+
+jobs:
+  update-website:
+    if: github.event_name == 'workflow_dispatch' || (!github.event.release.prerelease && startsWith(github.event.release.tag_name, 'android-v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Check release validation
+        run: node --test scripts/android-release.test.mjs scripts/github-android-release.test.mjs
+      - name: Verify public APK and update website
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VERCEL_RELEASE_DEPLOY_HOOK: ${{ secrets.VERCEL_RELEASE_DEPLOY_HOOK }}
+        run: node scripts/publish-android-release.mjs

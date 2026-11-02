@@ -32,13 +32,26 @@ Public downloads use build-time `PUBLIC_APK_URL`, `PUBLIC_APK_SHA256` and
 tag-specific APK asset in `Ishidd/ginhawa-landing`. Leave the URL empty to retain
 coming soon. Publish this website change only after Stable approval.
 
-The approved production release is recorded in `vercel.json` under `build.env`.
-These three values are public download metadata, never credentials. Update them
-together after verifying the signed APK for each separately approved Stable
-release. Vercel rebuilds the page and `/download-qr.png` from the same URL; the
-QR can be saved from the download section. For local verification, set the same
-three environment variables before building. Run
-`node --test scripts/android-release.test.mjs`, then build and check.
+Stable Android releases automatically update the website. Publish a release in
+`Ishidd/ginhawa-landing` with tag `android-v<VERSION>-<BUILD>`, its matching
+`ginhawa-<VERSION>-<BUILD>.apk`, and `SHA256SUMS`. Upload both assets before
+publishing. The release workflow verifies the public APK bytes and checksum,
+then calls the dedicated Vercel deploy hook stored in the repository secret
+`VERCEL_RELEASE_DEPLOY_HOOK`. Drafts and prereleases do not trigger it. Duplicate
+runs skip deployment when that exact release is already live; Actions also
+offers a manual run with an optional forced rebuild. Create future release tags
+from current `main` so the workflow is included.
+
+`npm run build` selects the highest published stable Android build and checks
+its checksum against GitHub's asset digest. The build refuses older releases
+or changed bytes for an already deployed build. GitHub failures or invalid
+assets fail the build, retaining the previous live deployment. `vercel.json`
+contains the minimum approved build metadata, not an automatically maintained
+latest-version record. `/android-release.json` records the actual built release;
+the buttons, version and `/download-qr.png` use that same release. Fetching is
+build-time only; visitors do not call GitHub, Firebase or AI. No scheduled job
+is needed. Standard releases trigger one deployment and no uploaded Actions
+artifacts. Run `node --test scripts/*release.test.mjs`, then build and check.
 
 These variables do not enable in-app updates. Firestore OTA approval is a
 separate operator action. See `../ginhawa/docs/android-ota-updates.md` for the
