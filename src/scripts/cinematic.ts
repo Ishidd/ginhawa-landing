@@ -263,8 +263,8 @@ function measure() {
   const left = mobile ? 14 : Math.max(40, pageWidth * .045);
   const right = pageWidth - left;
   const corridors = mobile
-    ? [right, left, right, left, right, left]
-    : [right, columnGap('.purpose-copy', '.assessment-overview'), columnGap('.chika-world', '.chika-copy'), innerWidth > 1100 ? columnGap('.showcase-context', '.showcase-stage') : left, columnGap('.ai-copy', '.ai-visual'), left];
+    ? [right, left, right, left, right, left, left]
+    : [right, columnGap('.purpose-copy', '.assessment-overview'), columnGap('.chika-world', '.chika-copy'), innerWidth > 1100 ? columnGap('.showcase-context', '.showcase-stage') : left, columnGap('.ai-copy', '.ai-visual'), left, left];
   const boxes = sections.map(section => layoutBox(section));
   stops = sections.map((section, i) => {
     const heading = section.querySelector<HTMLElement>('h1, h2')!;
@@ -368,7 +368,7 @@ function scheduleScroll() {if (!scrollFrame) scrollFrame = requestAnimationFrame
 function scheduleMeasure() {if (!measureFrame) measureFrame = requestAnimationFrame(measure);}
 addEventListener('scroll', scheduleScroll, {passive:true});
 addEventListener('resize', scheduleMeasure);
-// Native FAQ disclosures and font swaps can move Download. Remeasure the real
+// Native FAQ disclosures and font swaps can move route anchors. Remeasure the real
 // content, not just the viewport, including while an answer expands/collapses.
 new ResizeObserver(scheduleMeasure).observe(main);
 document.fonts.ready.then(scheduleMeasure);

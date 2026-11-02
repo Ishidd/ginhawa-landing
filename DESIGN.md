@@ -19,7 +19,7 @@ All 18 supplied screenshots are retained as original JPEGs and optimized WebP co
 PUBLIC_APK_URL remains empty; the download area shows coming soon. A verified public HTTPS APK URL drives every download link and the generated QR when supplied.
 
 ## Desktop composition
-The hero uses available width without stretching to a full 1080px screen. Purpose copy sits beside concise PSS-10, Kessler K6, and PSQ-20 summaries. The gallery introduction, theme switch, and four working feature shortcuts form a left column beside the 3D phone stage. The former three-step section is removed; gallery flows directly into FAQ with a measured gap. Download copy and action sit side by side. Mobile stacks these groups, keeps feature shortcuts in two columns, and alternates the Chika tracker between both edges, crossing in the section gaps.
+The hero uses available width without stretching to a full 1080px screen. Purpose copy sits beside concise PSS-10, Kessler K6, and PSQ-20 summaries. The gallery introduction, theme switch, and four working feature shortcuts form a left column beside the 3D phone stage. The former three-step section is removed. Download uses a centered vertical stack on every screen size, followed by FAQ. Mobile keeps feature shortcuts in two columns and alternates the Chika tracker between both edges, crossing in the section gaps.
 
 ## Scroll-motion refinement
 The gallery corridor now sits between its introduction and phone stage on desktop, avoiding a full left-to-right sprint. Crossings span 120px of vertical route space instead of 88px. Line, marker, and chapter states share one time-based eased distance with bounded local speed and faster catch-up for long jumps. Animation stops on settlement; reduced motion tracks scroll directly. The endpoint remains Download.
@@ -55,6 +55,6 @@ Wide-screen refinement: Chika copy and the assessment list now start with a boun
 ### Centered FAQ
 FAQ is exempt from the shared split-column layout: its heading sits above an 800px centered stack of disclosure cards, shrinking to the common 32px mobile insets. The desktop route travels along the outer left margin instead of through the section center; mobile retains the outer edge route. Existing plus/minus transitions and native keyboard disclosures remain.
 
-Download now precedes the centered FAQ. The route excludes FAQ entirely and ends at the Download heading, before the FAQ begins. Download actions and QR configuration remain unchanged.
+Download precedes the centered FAQ. The route continues along the outer left margin through Download and ends beside the FAQ heading on desktop and mobile, keeping the centered content clear. Download is exempt from the shared split-column rails: its heading, action, version, and QR form one centered vertical stack. Copy is limited to the version and a short QR caption, or a single coming-soon line when no release is configured. Installation guidance remains in the download FAQ.
 
 Gallery transitions wait for decoded screen images and keep the current theme until every replacement is ready. Social cards now match the cinematic navy/mint site, with current Chika and a real app screen at 1200×630.
